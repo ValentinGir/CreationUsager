@@ -147,9 +147,28 @@
 
                 <input type="submit">
             </form>
+
+
         <?php
         }
-
+        else {
+            //Cas #2 On affiche la carte de l'usager
+            ?>
+            <div class="card" style="width: 18rem;">
+                <img src="<?php echo $_POST['avatar'] ?>" class="card-img-top" alt="avatar">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo $_POST['nom'] ?></h5>
+                    <p class="card-text">Mail : <?php echo $_POST['mail'] ?></p>
+                    <p class="card-text">Sexe : <?php echo $_POST['sexe'] ?></p>
+                    <p class="card-text">Date de naissance : <?php echo $_POST['naissance'] ?></p>
+                    <p class="card-text">Moyen de transport : <?php echo $_POST['transport'] ?></p>
+                    <a href="index.php" class="btn btn-primary">Créer un nouvel usager</a>
+                </div>
+            </div>
+            <?php
+        }
+        
+        
         function trojan($data){
             $data = trim($data); //Enleve les caractères invisibles
             $data = addslashes($data); //Mets des backslashs devant les ' et les  "
@@ -158,7 +177,9 @@
             return $data;
         }
 
-    ?> 
+    ?>
+    
+    
 <script src="https://kit.fontawesome.com/97daa36ca6.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
