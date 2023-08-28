@@ -11,9 +11,8 @@
 <body>
     <h1>COURS 2</h1>
     <?php
-        $mailregex = "";
-        $nom = $mdp = $mdpconf = $mail = "";
-        $nomErreur = $mdpErreur = $mdpconfErreur = $mailErreur = "";
+        $nom = $mdp = $mdpconf = $mail = $avatar = $sexe = $naissance = $transport = "";
+        $nomErreur = $mdpErreur = $mdpconfErreur = $mailErreur = $avatarErreur = $sexeErreur = $naissanceErreur = $transportErreur =  "";
         $erreur = false;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST"){
@@ -22,15 +21,21 @@
             echo "<h1>POST == TRUE </h1>";
             
             if(empty($_POST['nom'])){
-                $nomErreur = "Le nom ne peut pas être vide";
+                $nomErreur = "Ce champ est obligatoire";
                 $erreur  = true;
             }
             else {
-                $nom = trojan($_POST['nom']);
+                if($_POST['nom'] != "SLAY"){
+                    $nom = trojan($_POST['nom']);
+                }
+                else {
+                    $nomErreur = "Ce nom est déjà pris";
+                    $erreur  = true;
+                }
             }
 
             if(empty($_POST['mdp'])){
-                $mdpErreur = "Le mot de passe ne peut pas être vide";
+                $mdpErreur = "Ce champ est obligatoire";
                 $erreur  = true;
             }
             else {
@@ -38,7 +43,7 @@
             }
 
             if(empty($_POST['mdpconf'])){
-                $mdpConfErreur = "La confirmation de mot de passe ne peut pas être vide";
+                $mdpconfErreur = "Ce champ est obligatoire";
                 $erreur  = true;
             }
             else {
@@ -50,22 +55,53 @@
                     $mdpconf = trojan($_POST['mdpconf']);
                 }
             }
+
             if(empty($_POST['mail'])){
-                $mailErreur = "L'adresse courriel ne peut pas être vide";
+                $mailErreur = "Ce champ est obligatoire";
                 $erreur  = true;
             }
             else {
-                if(preg_match($mailregex, $_POST['mail'])) {
-                    $mail = trojan($_POST['mail']);
-                }
-                else {
+                if(!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
                     $mailErreur = "L'adresse courriel n'est pas valide";
                     $erreur  = true;
+                    
+                }
+                else {
+                    $mail = trojan($_POST['mail']);
                 }
             }
-            
 
+            if(empty($_POST['avatar'])){
+                $avatarErreur = "Ce champ est obligatoire";
+                $erreur  = true;
+            }
+            else {
+                $avatar = trojan($_POST['avatar']);
+            }
 
+            if(isset($_POST['sexe'])){
+                $sexe = trojan($_POST['sexe']);
+            }
+            else {
+                $sexeErreur = "Ce champ est obligatoire";
+                $erreur  = true;
+            }
+
+            if(empty($_POST['naissance'])){
+                $naissanceErreur = "Ce champ est obligatoire";
+                $erreur  = true;
+            }
+            else {
+                $naissance = trojan($_POST['naissance']);
+            }
+
+            if(empty($_POST['transport'])){
+                $transportErreur = "Ce champ est obligatoire";
+                $erreur  = true;
+            }
+            else {
+                $transport = trojan($_POST['transport']);
+            }
 
             //AFFICHER LE RÉSULTAT DE MON FORM
         }
@@ -86,6 +122,28 @@
 
                 Adresse courriel : <input type="text" name="mail" maxLength="30" value="<?php echo $mail;?>"> <br>
                 <p style="color:red;"><?php echo $mailErreur; ?></p>
+
+                Lien vers une image avatar : <input type="text" name="avatar" value="<?php echo $avatar;?>"><br>
+                <p style="color:red;"><?php echo $avatarErreur; ?></p>
+
+                Sexe : <br>
+                <input type="radio" name="sexe" id="masculin" value="masculin" <?php if($sexe == "masculin") echo ("CHECKED"); ?>> Masculin <br>
+                <input type="radio" name="sexe" id="féminin" value="féminin" <?php if($sexe == "féminin") echo ("CHECKED"); ?>> Féminin <br>
+                <input type="radio" name="sexe" id="nongenré" value="nongenré" <?php if($sexe == "nongenré") echo ("CHECKED"); ?>> Non genré <br>
+                <p style="color:red;"><?php echo $sexeErreur; ?></p>
+
+                Date de naissance : <input type="date" name="naissance" value="<?php echo $naissance;?>"><br>
+                <p style="color:red;"><?php echo $naissanceErreur; ?></p>
+
+                <label for="transport"> Moyen de transport : </label>
+                <select name="transport">
+                    <option value="" disabled selected>Choisir votre option </option>
+                    <option value="auto" <?php if($transport == "auto") echo ("SELECTED"); ?>>Auto</option>
+                    <option value="autobus" <?php if($transport == "autobus") echo ("SELECTED"); ?>>Autobus</option>
+                    <option value="marche" <?php if($transport == "marche") echo ("SELECTED"); ?>>Marche</option>
+                    <option value="vélo" <?php if($transport == "vélo") echo ("SELECTED"); ?>>Vélo</option>
+                </select>
+                <p style="color:red;"><?php echo $transportErreur; ?></p><br>
 
                 <input type="submit">
             </form>
